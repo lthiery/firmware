@@ -28,11 +28,15 @@ CPPSRC += $(call target_files,app/cbox,*.cpp)
 CSRC += $(call target_files,platform/wiring/,*.c)
 CPPSRC += $(call target_files,platform/wiring/,*.cpp)
 
-#CSRC += $(call target_files,platform/spark/modules,*.c)
-#CPPSRC += $(call target_files,platform/spark/modules,*.cpp)
-
 CPPSRC += $(call target_files,controlbox/src/lib,*.cpp)
 CPPSRC += $(call here_files,platform/spark/libs/mdns/firmware,*.cpp)
+
+# non recursive, so modules can be selectively included
+CSRC += $(call here_files,platform/spark/modules,*.c)
+CPPSRC += $(call here_files,platform/spark/modules,*.cpp)
+
+# include selected modules
+CPPSRC += $(call here_files,platform/spark/modules/EEPROM,*.cpp)
 
 ifeq ($(BOOST_ROOT),)
 $(error BOOST_ROOT not set. Download boost and add BOOST_ROOT to your environment variables.)
