@@ -7,15 +7,15 @@ INCLUDE_DIRS += $(SOURCE_PATH)/app/fallback
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/wiring
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules
-INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/BrewPiTouch
+#INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/BrewPiTouch
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/Display
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/EEPROM
-# INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/eGUI_screens
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/OneWire
+#INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/eGUI_screens
 INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/Ticks
 INCLUDE_DIRS += $(SOURCE_PATH)/controlbox/src/lib
-INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/UI
-INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/Buzzer
+#INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/UI
+#INCLUDE_DIRS += $(SOURCE_PATH)/platform/spark/modules/Buzzer
 INCLUDE_DIRS += $(SOURCE_PATH)/app
 INCLUDE_DIRS += $(LIBS_DIR)/mdns/firmware
 
@@ -52,13 +52,12 @@ CFLAGS += -I$(BOOST_ROOT)
 #endif
 
 SRC_EGUI = $(SOURCE_PATH)/platform/spark/modules/eGUI
-include $(SRC_EGUI)/egui.mk
+#include $(SRC_EGUI)/egui.mk
 
 ifneq ("$(PLATFORM_ID)","3")
 LIBS_DIR = $(SOURCE_PATH)/platform/spark/libs
 include $(LIBS_DIR)/libs.mk
 endif
-
 
 CFLAGS += -fdata-sections
 
