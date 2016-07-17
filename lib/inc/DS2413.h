@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "OneWireSwitch.h"
 #include "Logger.h"
+#include "OneWireDevice.h"
 
 typedef uint8_t pio_t;
 
@@ -42,17 +42,25 @@ typedef uint8_t pio_t;
  * channelSense senses if the channel is pulled high.
  */
 class DS2413:
-    public OneWireSwitch
+    public OneWireDevice
 {
 public:
-    DS2413() : cachedState(0), connected(false)
+    /**
+     * Constructor, initializes cached state to 0xff, which is an invalid state to signal that the cache is not valid yet.
+     */
+    DS2413() : cachedState(0xff), connected(false)
     {
     }
 
     /**
+     * Destructor is default
+     */
+    ~DS2413() = default;
+
+    /**
      *  The DS2413 returns data in the last 4 bits, the upper 4 bits are the complement.
      *  This allows checking wether the data is valid
-     *  @return: whether data is valid (upper bits are complement of lower bits)
+     *  @returns whether data is valid (upper bits are complement of lower bits)
      */
     bool cacheIsValid() const;
 
@@ -63,7 +71,7 @@ public:
      * @param useCached     do not read the pin states from the device
      * @return              true on success, false on failure
      */
-    bool latchWrite(pio_t pio,
+    bool writeLatchBit(pio_t pio,
                     bool  set,
                     bool  useCached);
 
@@ -73,7 +81,7 @@ public:
      * @param defaultValue      value to return when the read fails
      * @param useCached         do not read current pin state from device, but use cached state
      */
-    bool latchRead(pio_t pio,
+    bool readLatchBit(pio_t pio,
                    bool defaultValue,
                    bool useCached);
 
@@ -117,6 +125,22 @@ private:
      */
     uint8_t writeByteFromCache();
 
+
+    /**
+     * Read all values at once, both current state and sensed values for the DS2413.
+     * Output state of 8 pins for the DS2408.
+     */
+    uint8_t accessRead();
+
+    /**
+     * Writes the state of all PIOs in one operation.
+     * @param b pio data - PIOA is bit 0 (lsb), PIOB is bit 1 for DS2413. All bits are used for DS2408
+     * @param maxTries the maximum number of attempts before giving up.
+     * @return true on success
+     */
+    bool accessWrite(uint8_t b, uint8_t maxTries = 3);
+
+
 #if DS2413_SUPPORT_SENSE
 
 public:
@@ -140,4 +164,9 @@ public:
 
 #endif
 
+private:
+    static const uint8_t ACCESS_READ = 0xF5;
+    static const uint8_t ACCESS_WRITE = 0x5A;
+    static const uint8_t ACK_SUCCESS = 0xAA;
+    static const uint8_t ACK_ERROR = 0xFF;
 };

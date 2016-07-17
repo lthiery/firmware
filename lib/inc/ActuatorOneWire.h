@@ -65,7 +65,7 @@ class ActuatorOneWire final:
         void setActive(bool active) override final
         {
             // todo: alarm when write fails
-            device.latchWrite(pio, active ^ invert, true);
+            device.writeLatchBit(pio, active ^ invert, true);
         }
 
         bool isActive() const override final
@@ -76,7 +76,7 @@ class ActuatorOneWire final:
 #if DS2413_SUPPORT_SENSE
         bool sense()
         {
-            device.latchWrite(pio, 0, false);
+            device.writeLatchBit(pio, 0, false);
 
             return device.sense(pio, invert);    // on device failure, default is high for invert, low for regular.
         }

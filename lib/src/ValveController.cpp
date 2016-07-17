@@ -44,7 +44,7 @@ void ValveController::update() {
 
     uint8_t output = switchState;
 
-    if(pio == 0){
+    if(output == 0){
         act = (switchState >> 6) & 0x3;
         sense = (switchState >> 4) & 0x3;
         if (act == sense) {
@@ -52,7 +52,7 @@ void ValveController::update() {
             output |= (uint8_t(ValveActions::OFF) << 6);
         }
     }
-    else if(pio == 1){
+    else if(output == 1){
         act = (switchState >> 2) & 0x3;
         sense = switchState & 0x3;
         if (act == sense) {
@@ -84,12 +84,12 @@ void ValveController::write(ValveActions action) {
     update();
     uint8_t action_ = uint8_t(action);
     uint8_t output = maskSenseBits(switchState);
-    if(pio == 0){
+    if(output == 0){
         output = maskWriteBitsA(output);
         output |= action_ << 6;
         device.accessWrite(output);
     }
-    else if(pio == 1){
+    else if(output == 1){
         output = maskWriteBitsB(output);
         output |= action_ << 2;
         device.accessWrite(output);

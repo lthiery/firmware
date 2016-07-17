@@ -21,16 +21,14 @@
 
 #include "OneWire.h"
 #include "OneWireAddress.h"
-#include <string.h>
 
-
-class OneWireSwitch {
+class OneWireDevice {
 public:
-    OneWireSwitch(){
+    OneWireDevice(){
         oneWire = nullptr;
     }
 protected:
-    ~OneWireSwitch() = default;
+    ~OneWireDevice() = default;
 public:
 
     void init(OneWire* oneWire, DeviceAddress address);
@@ -40,21 +38,6 @@ public:
 protected:
     OneWire* oneWire;
     DeviceAddress address;
-
-public:    
-    /*
-     * Read all values at once, both current state and sensed values for the DS2413.
-     * Output state of 8 pins for the DS2408.
-     */
-    uint8_t accessRead();
-
-    /*
-     * Writes the state of all PIOs in one operation.
-     * /param b pio data - PIOA is bit 0 (lsb), PIOB is bit 1 for DS2413. All bits are used for DS2408
-     * /param maxTries the maximum number of attempts before giving up.
-     * /return true on success
-     */
-    bool accessWrite(uint8_t b, uint8_t maxTries = 3);
 };
 
 

@@ -26,11 +26,11 @@ class ValveController final : public ActuatorDigital, public ValveControllerMixi
 public:
     ValveController(OneWire *     bus,
                     DeviceAddress address,
-                    pio_t         pio_) :
+                    uint8_t       output_) :
                     switchState(0xff), // Set outputs and inputs to OFF state
                     sense(0b11), // Set sense to OFF state (in between)
                     act(0b11),   // set output to OFF (not open/closed, no action)
-                    pio(pio_){  //
+                    output(output_){  //
         device.init(bus, address);
     }
     ~ValveController() = default;
@@ -80,7 +80,7 @@ protected:
     uint8_t switchState; // state bits of the entire switch
     uint8_t sense; // sensed value (feedback)
     uint8_t act; // written value (actuator)
-    pio_t pio; // 0=A or 1=B
+    uint8_t output; // 0=A or 1=B
     DS2408 device;
 
     friend class ValveControllerMixin;
